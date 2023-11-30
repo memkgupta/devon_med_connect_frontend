@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { GoDeviceCameraVideo } from "react-icons/go";
-import { FaMapMarkerAlt,FaCalendar ,FaGraduationCap, FaStar, FaMoneyBillWave, FaStethoscope } from 'react-icons/fa';
+import { FaMapMarkerAlt,FaCalendar ,FaGraduationCap, FaStar, FaMoneyBillWave, FaStethoscope, FaCamera } from 'react-icons/fa';
+import Calendar from '../components/Calendar';
+import TimeSlotCard from '../components/cards/TimeSlotCard';
+import AppointmentStatus from '../components/cards/AppointmentStatus';
+import dayjs from 'dayjs';
+import RatingsAndReviews from '../components/RatingsAndReviews';
 function Doctor() {
+  const navigate = useNavigate();
+  const [isAppointmentSlotAvailaible,setIsAppointmentSlotAvailaible] = useState(null);
+  const [isOnlineSlotAvailaible,setIsOnlineSlotAvailaible] = useState(null);
+  const [selectedOnlineDate,setSelectedOnlineDate]=useState(null);
+  const [selectedAppointmentDate,setSelectedAppointmentDate]=useState(null);
     const [docs,setDocs]=useState([{
         id: "doc01",
         name: "Dr. John Smith",
@@ -38,7 +48,10 @@ function Doctor() {
   useEffect(()=>{
     setDoc(docs.filter((d)=>(d.id===id))[0]);
     console.log(docs.filter((d)=>(d.id===id)))
-  },[])
+  },[]);
+  const handleSlotChecker = async()=>{
+
+  }
       return (
 
     doc&& (
@@ -108,6 +121,35 @@ function Doctor() {
 <Link className='bg-blue-700 p-2 rounded-md text-white flex items-center' to={`/appointment/schedule/${id}`}><FaCalendar className='mx-2 mt-1'/> Book An Appointment</Link>
 
     </div>
+  {/* Checking slots for appointment */}
+  <p className="my-12 text-lg font-bold">Check Slot Availaibality for Appointment</p>
+<div id="slot_checker" className='flex justify-around mt-12'>
+
+<Calendar setdate={setSelectedAppointmentDate}/>
+
+<TimeSlotCard id={id} date={selectedAppointmentDate} setSlotAvailable={setIsAppointmentSlotAvailaible}/>
+<div className="grid gap-y-2">
+<AppointmentStatus isSlotAvailable={isAppointmentSlotAvailaible}/>
+<button onClick={(e)=>{navigate(`/appointment/schedule/${id}`)}} disabled={!isAppointmentSlotAvailaible}  className='bg-blue-700 p-2 rounded-md h-10 text-white flex items-center'><FaCalendar className='mx-2 mt-1'/> Book An Appointment</button>
+</div>
+
+</div>
+{/* Online Slot Checker */}
+<p className="my-12 text-lg font-bold">Check Slot Availaibality for Online Meeting</p>
+<div id="slot_checker" className='flex justify-around mt-12'>
+
+<Calendar setdate={setSelectedOnlineDate} />
+<TimeSlotCard id={id} date={selectedOnlineDate} setSlotAvailable={setIsOnlineSlotAvailaible}/>
+<div className="grid gap-y-2">
+<AppointmentStatus isSlotAvailable={isOnlineSlotAvailaible}/>
+<button onClick={(e)=>{navigate(`/online-meeting/schedule/${id}`)}} disabled={!isOnlineSlotAvailaible}  className='bg-blue-700 p-2 rounded-md h-10 text-white flex items-center'><GoDeviceCameraVideo className='mx-2 mt-1'/>Schedule An Online Meeting</button>
+</div>
+</div>
+
+{/* Ratings And Reviews */}
+{/* <div className="flex justify-center items-center mt-5">
+      <RatingsAndReviews />
+    </div> */}
 </div>
     )
 
