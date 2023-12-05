@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -18,14 +18,29 @@ import CreateRoom from './pages/CreateRoom'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import DoctorRegistration from './components/forms/DoctorRegistration'
+import { useDispatch } from 'react-redux'
+import { loadUser, loadUserThunk } from './redux/user'
+import Account from './pages/Account'
+import { useToken } from './context/TokenProvider'
+import Dashboard from './pages/Dashboard'
 
 function App() {
+const dispatch = useDispatch();
 
+const [token,setToken]=useToken()
+useEffect(()=>{
+  console.log("Setting User")
+if(token!=null){
+  dispatch(loadUserThunk(token));
+}
 
+},[token]);
   return (
   <BrowserRouter>
   <Navbar/>
   <Routes>
+    <Route element={<Account/>} path='/me'></Route>
+    <Route element={<Dashboard/>} path='/dashboard'></Route>
     <Route element={<Home></Home>} path='/'></Route>
     <Route element={<Doctors></Doctors>} path='/doctors'></Route>
     <Route element={<Doctor></Doctor>} path='/doctor/:id'></Route>
