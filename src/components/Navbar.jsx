@@ -11,8 +11,9 @@ function Navbar() {
             <div className="text-xl text-white" onClick={(e)=>{setIsOpen(!isOpen)}}>
             <TiThMenu />
             </div>
-            <div id='account-menu' className="rounded-full w-10 h-10 bg-gray-200 ">
+            <div id='account-menu' className="relative rounded-full w-10 h-10 bg-gray-200 ">
         <img className='rounded-full w-10 h-10 ' src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Avatar_icon_green.svg/30px-Avatar_icon_green.svg.png" alt="" />
+        
       </div>
         <div className="text-white font-bold text-lg">Your Logo</div>
         </div>

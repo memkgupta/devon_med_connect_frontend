@@ -130,7 +130,7 @@ function Doctor() {
 <TimeSlotCard id={id} date={selectedAppointmentDate} setSlotAvailable={setIsAppointmentSlotAvailaible}/>
 <div className="grid gap-y-2">
 <AppointmentStatus isSlotAvailable={isAppointmentSlotAvailaible}/>
-<button onClick={(e)=>{navigate(`/appointment/schedule/${id}`)}} disabled={!isAppointmentSlotAvailaible}  className='bg-blue-700 p-2 rounded-md h-10 text-white flex items-center'><FaCalendar className='mx-2 mt-1'/> Book An Appointment</button>
+<button onClick={(e)=>{navigate(`/appointment/schedule/${id}/form`)}} disabled={!isAppointmentSlotAvailaible}  className='bg-blue-700 p-2 rounded-md h-10 text-white flex items-center'><FaCalendar className='mx-2 mt-1'/> Book An Appointment</button>
 </div>
 
 </div>
@@ -142,7 +142,7 @@ function Doctor() {
 <TimeSlotCard id={id} date={selectedOnlineDate} setSlotAvailable={setIsOnlineSlotAvailaible}/>
 <div className="grid gap-y-2">
 <AppointmentStatus isSlotAvailable={isOnlineSlotAvailaible}/>
-<button onClick={(e)=>{navigate(`/online-meeting/schedule/${id}`)}} disabled={!isOnlineSlotAvailaible}  className='bg-blue-700 p-2 rounded-md h-10 text-white flex items-center'><GoDeviceCameraVideo className='mx-2 mt-1'/>Schedule An Online Meeting</button>
+<button onClick={(e)=>{navigate(`/online-meeting/schedule/${id}/form`)}} disabled={!isOnlineSlotAvailaible}  className='bg-blue-700 p-2 rounded-md h-10 text-white flex items-center'><GoDeviceCameraVideo className='mx-2 mt-1'/>Schedule An Online Meeting</button>
 </div>
 </div>
 

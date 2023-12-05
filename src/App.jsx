@@ -12,6 +12,12 @@ import AppointmentForm from './components/forms/AppointmentForm'
 
 import PatientReview from './components/forms/Review'
 import Confirm from './components/Confirm'
+import PatientWindow from './pages/PatientWindow'
+import Room from './pages/Room'
+import CreateRoom from './pages/CreateRoom'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
+import DoctorRegistration from './components/forms/DoctorRegistration'
 
 function App() {
 
@@ -28,6 +34,17 @@ function App() {
       <Route path='review' element={<PatientReview/>}/>
       <Route path='confirm' element={<Confirm/>}/>
     </Route>
+    <Route path='/login' element={<Login/>}></Route>
+    <Route path='/signup' element={<SignUp/>}></Route>
+    <Route element={<BookAppointment></BookAppointment>} path='/online-meeting/schedule/:id'>
+      <Route path='form' element={<AppointmentForm/>}/>
+      <Route path='review' element={<PatientReview/>}/>
+      <Route path='confirm' element={<Confirm/>}/>
+    </Route>
+    <Route path='/window/:id' element={<PatientWindow/>}/>
+    <Route path='/room/:id' element={<Room/>}/>
+    <Route path='/create-room/' element={<CreateRoom/>}/>
+    <Route path='/register/doctor' element={<DoctorRegistration/>}></Route>
   </Routes>
   </BrowserRouter>
   )

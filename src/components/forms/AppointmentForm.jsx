@@ -1,9 +1,11 @@
 // AppointmentForm.js
 import React, { useEffect, useState } from 'react';
+import { TiTick } from 'react-icons/ti';
 import { useNavigate, useOutlet, useOutletContext } from 'react-router-dom';
-
+import { MdDeleteOutline } from "react-icons/md";
 function AppointmentForm() {
     const [formData2, setformData2] = useState({
+        files:[],
         patientName: '',
         age: '',
         contact: '',
@@ -21,14 +23,42 @@ const [currentStep,setCurrentStep] = useOutletContext().step;
 
     setformData2((prevData) => ({
       ...prevData,
-      [name]: type === 'file' ? e.target.files[0] : value,
+      [name]: value,
     }));
   };
+ const handleAddReports=(e)=>{
 
+ }
+ const [reports,setReports] = useState([]);
+
+ const handleChangeReportFile=(name,index,e)=>{
+  e.preventDefault();
+  const newArr = [...reports];
+  newArr[index]={...newArr[index],[name]:name==='file'?e.target.files[0]:e.target.value}
+  console.log(newArr);
+setReports(newArr);
+ }
+const handleAddReport = (e)=>{
+  setReports([...reports,{title:"",file:null}]);
+
+}
+const removeReport = (index)=>{
+  let newArr = [...reports]
+  newArr = newArr.filter((_, i) => i !== index);
+  setReports(newArr);
+}
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add your form submission logic here
+    const files = [];
+    const titles = [];
+    console.log(reports)
+    reports.forEach((report)=>{
+files.push(report.file);
+titles.push(report.title);
+    });
+    setformData2(prev=>({...prev,files:files,reports:titles}));
     setFormData(formData2);
     console.log('Form submitted:', formData2);
     
@@ -172,13 +202,17 @@ setCurrentStep(1);
         <label htmlFor="reports" className="block text-sm font-medium text-gray-600">
           Reports (Optional)
         </label>
-        <input
-          type="file"
-          id="reports"
-          name="reports"
-          onChange={handleChange}
-          className="mt-1 p-2 w-full border rounded-md"
-        />
+      {reports.map((report,index)=>{
+        return(
+          <div className='flex justify-between mt-6 ' key={index}>
+          <input type="text" className='grow border-blue-100 outline-blue-100 mx-2 rounded-md' value={report.title} placeholder='Enter The Title Or Brief Description' required onChange={(e)=>{handleChangeReportFile('title',index,e)}}/>
+          <input type='file' id={`file-${index}`} hidden className='shrink'  placeholder='Select The pdf file' accept='.pdf , .doc , .docx' onChange={(e)=>{handleChangeReportFile('file',index,e)}}></input>
+          <span onClick={(e)=>{document.getElementById(`file-${index}`).click()} } className='bg-blue-200 py-5 text-center p-5 shrink'>{report.file?<TiTick/>:'+'}</span>
+          <span className='bg-red-300 p-5 text-white' onClick={(e)=>{removeReport(index)}}><MdDeleteOutline/></span>
+        </div>
+        )
+      })}
+      <p className='bg-blue-500 rounded-md w-full m-5 text-white p-2' onClick={(e)=>{handleAddReport(e)}}>+ Add Report</p>
       </div>
 
       <div className="flex justify-end">
