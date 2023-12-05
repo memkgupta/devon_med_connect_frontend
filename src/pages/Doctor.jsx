@@ -117,8 +117,7 @@ function Doctor() {
     </div>
     </div>
     <div className="flex mt-5 justify-around">
-<Link className='bg-blue-700 p-2 rounded-md text-white flex items-center' to={`/online-meeting/schedule/${id}`}><GoDeviceCameraVideo className='mx-2 mt-1'/> Schedule A Online Meeting</Link>
-<Link className='bg-blue-700 p-2 rounded-md text-white flex items-center' to={`/appointment/schedule/${id}`}><FaCalendar className='mx-2 mt-1'/> Book An Appointment</Link>
+
 
     </div>
   {/* Checking slots for appointment */}
