@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Doctor from '../components/cards/Doctor';
+import { useDispatch, useSelector } from 'react-redux';
+import { asyncLoadDoctors } from '../redux/doctors';
 
 function Doctors() {
+  const dispatch = useDispatch();
+  const doctors = useSelector((state)=>state.doctor);
     const range = (start, end) => {
         return Array.from({ length: end - start + 1 }, (_, i) => start + i);
       };
@@ -13,7 +17,7 @@ function Doctors() {
       const[totalPages,setTotalPages]= useState(20)
     const [specializations,setSpecializations] = useState([{ title: "General Physician", _id: "01" },
     { title: "Dermatologist", _id: "02" },
-    { title: "Cardiologist", _id: "03" }]);
+    { title: "Cardiology", _id: "03" }]);
 
     const [cities,setCities]=useState(["New Delhi","Greater Noida","Kasna","Jaipur"]);
     // const [filteredDocs,setFilteredDocs]= useState([]);
@@ -48,7 +52,7 @@ const [filteredDocs,setFilteredDocs] = useState([]);
     address: "789 Cardiology Lane, Heartsville",
     isRecommended:false
   },]);
-  const [query,setQuery] = useState({filter_name:"",filter_city:"",filter_specialization:""});
+  const [query,setQuery] = useState({filter_name:"",filter_city:"",filter_specialization:"",page:currentPage});
 const [selectedSpecialization,setSelectedSpecialization] = useState(null);
 const [selectedCity,setSelectedCity] = useState("");
     const handleSpecializationChange = (e)=>{
@@ -60,25 +64,42 @@ console.log(selectedCity)
     }
 const handleFilterChange = (e)=>{
 setQuery((prev)=>({...prev,[e.target.name]:e.target.value}));
-// console.log(query);
+
 
 }
+const getData = ()=>{
+  dispatch(asyncLoadDoctors({query}));
+}
+const filterDoctor=useCallback(()=>{
+let context = this;
+let timeout;
+if(timeout){
+  clearTimeout(timeout);
+}
+timeout = setTimeout(()=>{
 
+  getData.apply(this);
+},500);
+
+
+
+},[query])
 useEffect(()=>{
     
-    const filtereddocs = docs.filter((doc)=>{
-        console.log(query.filter_specialization,doc.specialization)
-        return(
-            doc.name.toUpperCase().includes(query.filter_name.toUpperCase())&&(query.filter_city!=""?query.filter_city===doc.city:true)&&(query.filter_specialization!=""?query.filter_specialization===doc.specialization:true)
-        )
-    });
-console.log(query)
-    setFilteredDocs(filtereddocs)
-    console.log(filtereddocs)
+filterDoctor();
 },[query])
     // useEffect(()=>{
 
     // },[specializations,city])
+    useEffect(()=>{
+      dispatch(asyncLoadDoctors({query}));
+    
+    },[]);
+
+useEffect(()=>{
+
+ setFilteredDocs(doctors.doctors)
+},[doctors])
   return (
     <div>
 <div className='flex items-center justify-around'>
@@ -134,9 +155,9 @@ console.log(query)
 </div>
 <hr className='my-5 w-4/6 ml-auto mr-auto bg-blue-700'  />
 <div className='my-5'>
-    {
+    {filteredDocs.length>0&&
         filteredDocs.map((doc)=>{
-return(<Doctor key={doc.id} doctor={doc}/>)
+return(<Doctor key={doc._id} doctor={doc}/>)
         })
     }
 </div>

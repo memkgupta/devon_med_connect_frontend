@@ -6,18 +6,20 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { BsRecord2Fill } from "react-icons/bs";
 function Account() {
   const {user} = useSelector(state=>state.user);
   const [token,setToken]=useToken();
   const [appointments,setAppointments]=useState([]);
+  const [meetings,setMeetings]=useState([]);
   const [patientWindows,setpatientWindows]=useState([{patient:{_id:"",name:""},window:{_id:"",doctor:""}}]);
   const navigate= useNavigate()
   const loadData = useCallback(async()=>{
-    const [resAppointments,respatientWindows] = await Promise.all(
+    const [resAppointments,respatientWindows,resMeetings] = await Promise.all(
 [axios.get(`${BASE_URL}/user/appointments`,{headers:{"Authorization":`${token}`}}),
 
-axios.get(`${BASE_URL}/user/windows`,{headers:{"Authorization":token}})]
+axios.get(`${BASE_URL}/user/windows`,{headers:{"Authorization":token}}),
+axios.get(`${BASE_URL}/user/meetings`,{headers:{"Authorization":token}})]
 
     )
     if(resAppointments.status!==200||respatientWindows.status!==200){
@@ -26,6 +28,7 @@ axios.get(`${BASE_URL}/user/windows`,{headers:{"Authorization":token}})]
     else{
       setAppointments(resAppointments.data.appointments);
       setpatientWindows(respatientWindows.data.windows);
+      setMeetings(resMeetings.data.meetings);
     }
   },[token]);
 
@@ -82,6 +85,17 @@ console.log(patientWindows)
         )})}
        
       </div>
+      {/* Upcoming Meetings */}
+      <div className='grid grid-cols-1 gap-y-3'>
+      <p className="text-lg font-semibold mb-2">Upcoming Meetings</p>
+      {meetings.map((meeting,index)=>{return(
+ <Link to={`/lobby/${meeting._id}`} key={index} className="shadow-md rounded-md p-5 bg-white">
+ <p className="text-xl font-bold text-black">{dayjs(meeting.date).toDate().toDateString()}</p>
+ <p className={`${meeting.isStarted?"text-red-500":"text-gray-800"}`}>{meeting.isStarted?<BsRecord2Fill />:"Not Started Yet"}</p>
+</Link>
+        )})}
+      </div>
+    
       </div>
      
     </div>

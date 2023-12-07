@@ -2,12 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 function Doctor({doctor}) {
-    const { id, name, imageUrl, specialization, rating, description, address,isRecommended } = doctor;
+    const { _id, name, images, specialization, ratings, description,pincode, streetAddress,state,city,isRecommended } = doctor;
   return (
-    <Link to={`/doctor/${id}`}>
+    <Link to={`/doctor/${_id}`}>
        <div className=" mx-8 rounded-md bg-white rounded-xl overflow-hidden shadow-md shadow-gray-200 my-5 flex items-center">
    <div className="w-2/6 relative">
-   <img className=" h-full object-cover" src={imageUrl} alt={`Doctor ${name}`} />
+   <img className=" h-full object-cover" src={images&&images[0].url} alt={`Doctor ${name}`} />
   {isRecommended&& <span className="z-40 absolute top-0 left-0 bg-blue-500 text-white py-1 px-2 rounded-full text-xs">
         Recommended
       </span>}
@@ -18,7 +18,7 @@ function Doctor({doctor}) {
       <div className="flex justify-center items-center mb-4">
         <span className="text-yellow-500 flex ">
           {/* Assuming rating is out of 5 */}
-          {[...Array(Math.round(rating))].map((_, index) => (
+          {[...Array(Math.round(ratings))].map((_, index) => (
             <svg
               key={index}
               className="h-4 w-4 fill-current"
@@ -32,10 +32,11 @@ function Doctor({doctor}) {
             </svg>
           ))}
         </span>
-        <span className="text-gray-600 ml-2">{rating.toFixed(1)}</span>
+        <span className="text-gray-600 ml-2">{ratings.toFixed(1)}</span>
       </div>
       <p className="text-gray-700 text-base mb-4">{description}</p>
-      <p className="text-gray-600 text-sm">{address}</p>
+      <p className="text-gray-600 text-sm">{`${streetAddress} , ${city} , ${pincode}`}</p>
+      <p className="text-gray-600 text-sm">{state}</p>
     </div>
     {/* Button Group */}
     <div className="grow grid content-center place-content-center gap-y-2">

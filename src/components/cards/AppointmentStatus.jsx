@@ -2,6 +2,7 @@ import React from 'react'
 
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'; // Import icons from react-icons
 function AppointmentStatus({isSlotAvailable}) {
+  console.log("slot",isSlotAvailable)
   return (
     <div className="flex items-center justify-center space-x-2">
       {isSlotAvailable ? (
@@ -11,7 +12,7 @@ function AppointmentStatus({isSlotAvailable}) {
         </>
       ) : (
         <>
-        {isSlotAvailable!==null?
+        {isSlotAvailable!=null?
     <>
       <FaTimesCircle className="text-red-500 text-2xl" />
           <p className="text-red-500">Sorry, doctor is busy. Try another slot.</p>
